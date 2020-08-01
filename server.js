@@ -15,7 +15,15 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/populate", { useNewUrlParser: true });
+var exphbs = require("express-handlebars");
+
+app.engine("handlebars", exphbs({
+  defaultLayout: "main"
+}));
+app.set("view engine", "handlebars");
+
+
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/fitnesstracker", { useNewUrlParser: true });
 
 db.Workout.create({ name: "Fitness Tracker" })
   .then(dbWorkout => {
@@ -26,7 +34,7 @@ db.Workout.create({ name: "Fitness Tracker" })
   });
 
 app.get("/", (req,res)=>{
-    res.send("hello world")
+    return res.render("create_exercise")
 })
 
 
