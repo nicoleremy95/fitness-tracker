@@ -25,24 +25,57 @@ app.set("view engine", "handlebars");
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/fitnesstracker", { useNewUrlParser: true });
 
-db.Workout.create({ name: "Fitness Tracker" })
-  .then(dbWorkout => {
-    console.log(dbWorkout);
+db.User.create({ name: "Fitness Tracker" })
+  .then(dbUser => {
+    console.log(dbUser);
   })
   .catch(({message}) => {
     console.log(message);
   });
 
 app.get("/", (req,res)=>{
+  db.Workout.find({})
+      .populate("exercises")
+      .then(dbWorkout => {
+        const workoutsJSON = dbWorkout.map(function(workoutObj){
+        return workoutObj.toJSON(); 
+      })
+      const hbsObj={
+        workouts:workoutsJSON
+      }
+      console.log(workoutsJSON)
+      res.render("options", hbsObj);
+      }).catch(err => {
+        res.json(err);
+      });
+    
+})
+
+app.get("/create_workout", (req,res)=>{
+    return res.render("create_workout")
+})
+
+app.get("/create_exercise", (req,res)=>{
     return res.render("create_exercise")
 })
 
 
-app.post("/submit", ({body}, res) => {
-    db.Exercise.create(body)
-      .then(({_id}) => db.Workout.findOneAndUpdate({}, { $push: { exercises: _id } }, { new: true }))
+app.post("/submit_workout", ({body}, res) => {
+    db.Workout.create(body)
+      .then(({_id}) => db.User.findOneAndUpdate({}, { $push: { workout: _id } }, { new: true }))
       .then(dbWorkout => {
         res.json(dbWorkout);
+      })
+      .catch(err => {
+        res.json(err);
+      });
+  });
+
+app.post("/submit_exercise", ({body}, res) => {
+    db.Exercise.create(body)
+      .then(({_id}) => db.Workout.findOneAndUpdate({}, { $push: { exercises: _id } }, { new: true }))
+      .then(dbExercise => {
+        res.json(dbExercise);
       })
       .catch(err => {
         res.json(err);

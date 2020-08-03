@@ -1,0 +1,31 @@
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1>add a workout or exercise?</h1>
+            <button class="workout">workout</button>
+            <button class="exercise">exercise</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h1>all of your workouts</h1>
+                {{#each workouts}}
+                    <div class="card">
+                        <h3>name: {{name}}</h1>
+                            {{#each exercises}}
+                                <ul>
+                                    <li>name:{{name}}</li>
+                                    <li>type:{{type}}</li>
+                                    <li>weight:{{weight}}</li>
+                                    <li>sets:{{sets}}</li>
+                                    <li>reps:{{reps}}</li>
+                                    <li>duration:{{duration}}</li>
+                                </ul>
+                            {{/each}}
+                   
+                    <button data-id={{_id}} class="exercise">add exercise</button>
+                    </div>
+                {{/each}} 
+        </div>
+    </div>
+</div>
