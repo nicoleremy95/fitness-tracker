@@ -52,6 +52,7 @@ app.get("/", (req,res)=>{
 })
 
 app.get("/create_workout", (req,res)=>{
+
     return res.render("create_workout")
 })
 
