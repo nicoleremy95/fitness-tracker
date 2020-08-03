@@ -59,7 +59,7 @@ app.post("/submit", ({body}, res) => {
       });
   });
   
-  app.get("/Workout", (req, res) => {
+  app.get("/workout", (req, res) => {
     db.Workout.find({})
       .then(dbWorkout => {
         res.json(dbWorkout);
